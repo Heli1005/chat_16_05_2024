@@ -3,6 +3,7 @@ import React from "react";
 import CustomInput from "../common/CustomInput"
 import { Formik, Form } from 'formik';
 import { SignUpSchema } from "./schemas/SignUpSchema";
+import CustomFileUpload from "../common/CustomFileUpload";
 
 let initialState = {
   name: '',
@@ -40,9 +41,12 @@ const SignUp = (props) => {
       type: 'password'
     },
     profile: {
+      type: 'file',
       id: 'profile',
       label: 'Profile',
-      isrequired: true
+      isrequired: true,
+      accept:'image/*',
+      allow:'image'
     }
   }
 
@@ -61,6 +65,7 @@ const SignUp = (props) => {
           <CustomInput field={signUpObject.email} />
           <CustomInput field={signUpObject.password} />
           <CustomInput field={signUpObject.confirmPassword} />
+          <CustomFileUpload field={signUpObject.profile} />
           <Button type="submit" bg="teal.600"
             color="white"
             _hover={{ bg: 'teal.700' }} mt={4} w={'100%'}>Register</Button>
