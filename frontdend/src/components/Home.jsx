@@ -14,7 +14,7 @@ const Home = () => {
         </Text>
       </Box>
       <Box mt={3} p={3} bg={'gray.100'} d={'flex'} w={'100%'} borderRadius={'md'} shadow={'6px 7px 10px black'}>
-        <Tabs index={tabIndex} onChange={(index) => setTabIndex(index)} variant='solid-rounded' w={'100%'} colorScheme='teal'>
+        <Tabs index={tabIndex} onChange={(index) => setTabIndex(index)} variant='solid-rounded' w={'100%'} colorScheme='teal' >
           <TabList w={'100%'} d={'flex'}  justifyContent={'center'} rowGap={10}>
             <Tab borderRadius={'md'} w={'50%'}>Login</Tab>
             <Tab borderRadius={'md'} w={'50%'}>Sign Up</Tab>

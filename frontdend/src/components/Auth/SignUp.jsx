@@ -10,7 +10,8 @@ let initialState = {
   email: '',
   password: '',
   confirmPassword: '',
-  profile: ''
+  profileUrl: '',
+  profileName:''
 }
 
 const SignUp = (props) => {
@@ -45,8 +46,8 @@ const SignUp = (props) => {
       id: 'profile',
       label: 'Profile',
       isrequired: true,
-      accept:'image/*',
-      allow:'image'
+      accept: 'image/*',
+      allow: 'image'
     }
   }
 
@@ -59,18 +60,23 @@ const SignUp = (props) => {
 
       }}
     >
-      <Form>
-        <VStack>
-          <CustomInput field={signUpObject.name} />
-          <CustomInput field={signUpObject.email} />
-          <CustomInput field={signUpObject.password} />
-          <CustomInput field={signUpObject.confirmPassword} />
-          <CustomFileUpload field={signUpObject.profile} />
-          <Button type="submit" bg="teal.600"
-            color="white"
-            _hover={{ bg: 'teal.700' }} mt={4} w={'100%'}>Register</Button>
-        </VStack>
-      </Form>
+      {
+        ({ setFieldValue }) => (
+
+          <Form>
+            <VStack>
+              <CustomInput field={signUpObject.name} />
+              <CustomInput field={signUpObject.email} />
+              <CustomInput field={signUpObject.password} />
+              <CustomInput field={signUpObject.confirmPassword} />
+              <CustomFileUpload field={signUpObject.profile} setFieldValue={setFieldValue} />
+              <Button type="submit" bg="teal.600"
+                color="white"
+                _hover={{ bg: 'teal.700' }} mt={4} w={'100%'}>Register</Button>
+            </VStack>
+          </Form>
+        )
+      }
     </Formik>
   </>;
 };

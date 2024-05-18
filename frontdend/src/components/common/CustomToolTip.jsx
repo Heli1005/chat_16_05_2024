@@ -1,16 +1,13 @@
-import { Text, Tooltip } from "@chakra-ui/react";
+import {  Tooltip } from "@chakra-ui/react";
 import React from "react";
 
-const CustomToolTip = ({title, children}) => {
+const CustomToolTip = ({ title, children }) => {
 
-    console.log("children", children);
-    
-    
-  return <>
-      <Tooltip label={title}>
-          <>{children}</>
-      </Tooltip>
-  </>;
+    return <>
+        <Tooltip placement={'top-end'} hasArrow label={title} bg='teal.600' color='white' p={3} borderRadius={5}>
+            {children}
+        </Tooltip>
+    </>;
 };
 
 export default CustomToolTip;
