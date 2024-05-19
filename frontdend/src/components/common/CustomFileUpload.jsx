@@ -1,5 +1,3 @@
-
-
 import { Box, Button, FormControl, HStack, Image, Input, Text } from "@chakra-ui/react";
 import React, { useRef } from "react";
 import { Field } from 'formik';
@@ -21,8 +19,7 @@ const FormField = ({ field, form, setProfile }) => {
     };
 
     const handleRemoveImage = () => {
-        setProfile('profileUrl', '');
-        setProfile('profileName', '');
+        setProfile(field.id, ''); 
     }
 
     const handleFileChange = (event, setProfileObj) => {
@@ -30,8 +27,7 @@ const FormField = ({ field, form, setProfile }) => {
         const file = event.target.files[0];
 
         if (file) {
-            setProfileObj('profileUrl', URL.createObjectURL(file));
-            setProfileObj('profileName', file.name);
+            setProfileObj(field.id, URL.createObjectURL(file));
         }
     };
     return <>
@@ -67,14 +63,14 @@ const FormField = ({ field, form, setProfile }) => {
                         {` Upload ${field.label}`}
                     </Text>
                     {
-                        (values['profileName']) &&
+                        (values[field.id]) &&
                             field.allow === 'image'
                             ?
                             (
                                 <Box position="relative" display="inline-block" >
                                     <Image
-                                        src={values['profileUrl']}
-                                        alt={values['profileName']}
+                                        src={values[field.id]}
+                                        alt={values[field.id]}
                                         maxH="55px"
                                         mx="auto"
                                         borderRadius="md"
@@ -82,7 +78,7 @@ const FormField = ({ field, form, setProfile }) => {
                                             e.stopPropagation()
                                         }}
                                     />
-                                    <CustomToolTip title='Remove Profile'  >
+                                    <CustomToolTip title={`Remove ${field.label}`}  >
                                         <Text
                                             top={"-2"}
                                             right={"-2"}
@@ -104,7 +100,7 @@ const FormField = ({ field, form, setProfile }) => {
                             )
                             :
                             <Text fontSize="lg" color="teal.500">
-                                {values['profileName']}
+                                {values[field.id]}
                             </Text>
                     }
                 </HStack>
