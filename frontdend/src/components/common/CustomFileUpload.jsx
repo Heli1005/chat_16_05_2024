@@ -1,13 +1,16 @@
-import { Box, Button, FormControl, HStack, Image, Input, Text } from "@chakra-ui/react";
+import { Box, Button, FormControl, HStack, Image, Input, Text, useToast } from "@chakra-ui/react";
 import React, { useRef } from "react";
+import Axios from "axios";
 import { Field } from 'formik';
 import CustomToolTip from "./CustomToolTip";
 
-const CustomFileUpload = ({ field, setFieldValue }) => <Field component={FormField} field={field} setProfile={setFieldValue} />
+const CustomFileUpload = ({ field, setFieldValue, setImageLoading }) => <Field component={FormField} field={field} setProfile={setFieldValue} setImageLoading={setImageLoading} />
 
 export default CustomFileUpload;
 
-const FormField = ({ field, form, setProfile }) => {
+const FormField = ({ field, form, setProfile, setImageLoading }) => {
+
+    const toast = useToast()
 
     const inputRef = useRef(null);
     const { touched, errors, handleBlur, values } = form
@@ -18,18 +21,94 @@ const FormField = ({ field, form, setProfile }) => {
         inputRef.current.click();
     };
 
-    const handleRemoveImage = () => {
-        setProfile(field.id, ''); 
+    const handleRemoveImage = async () => {
+        await setProfile('imageLoading', true);
+        await handleDeleteUploadedImage()
+        await setProfile(field.id, '');
+        await setProfile('imageId', '');
+        await setProfile('imageLoading', false);
+
+
     }
 
-    const handleFileChange = (event, setProfileObj) => {
+    const handleFileChange = async (event, setProfileObj) => {
+        await setProfile('imageLoading', true);
 
         const file = event.target.files[0];
-
         if (file) {
-            setProfileObj(field.id, URL.createObjectURL(file));
+            let uploadedImageObj = await handleUpload(file) || null
+
+            if (uploadedImageObj) {
+                setProfileObj(field.id, uploadedImageObj.secure_url);// URL.createObjectURL(file)
+                setProfileObj('imageId', uploadedImageObj.public_id);// URL.createObjectURL(file)
+            } else {
+                toast({
+                    title: 'Something went wrong please try after some time',
+                    description: "We've created your account for you.",
+                    status: 'error',
+                    duration: 5000,
+                    isClosable: true,
+                })
+            }
+        } else {
+            toast({
+                title: 'Select proper image',
+                description: "We've created your account for you.",
+                status: 'error',
+                duration: 5000,
+                isClosable: true,
+            })
+        }
+        await setProfile('imageLoading', false);
+    };
+
+    const handleUpload = async (image) => {
+
+        const formData = new FormData();
+        formData.append('image', image);
+
+        try {
+            const response = await Axios.post('/api/uploadimage', formData, {
+                headers: { 'Content-Type': 'multipart/form-data' },
+            });
+            return response.data.result
+        } catch (error) {
+            toast({
+                title: `Error uploading image: ${error}`,
+                description: "We've created your account for you.",
+                status: 'error',
+                duration: 5000,
+                isClosable: true,
+            })
+            return null
         }
     };
+
+    const handleDeleteUploadedImage = async () => {
+        try {
+            const response = await Axios.delete(`/api/uploadimage/delete`, {
+                data: { public_id: values['imageId'] }
+            });
+            toast({
+                title: `${response.data.message}`,
+                status: 'success',
+                duration: 5000,
+                isClosable: true,
+            })
+
+            return null
+        } catch (error) {
+            toast({
+                title: `Error uploading image : ${error}`,
+                description: "We've created your account for you.",
+                status: 'error',
+                duration: 5000,
+                isClosable: true,
+            })
+            return null
+        }
+    }
+
     return <>
         <FormControl>
             {
@@ -105,6 +184,6 @@ const FormField = ({ field, form, setProfile }) => {
                     }
                 </HStack>
             </Button>
-        </FormControl> 
+        </FormControl>
     </>
 }

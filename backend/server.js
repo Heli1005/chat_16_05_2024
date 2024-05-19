@@ -1,23 +1,31 @@
 import express from "express";
 import dotenv from "dotenv";
 import colors from "colors";
-import { chats } from "./data/data.js";
+// import { chats } from "./data/data.js";
+import { v2 as cloudinary } from 'cloudinary';
 import { connectDB } from "./config/db.js";
 import userRoutes from "./routes/userRoutes.js";
+import uploadRoutes from "./routes/uploadRoutes.js";
 import { errorHandler, notFound } from "./middleware/errorMiddleware.js";
 
 dotenv.config()
 connectDB()
+cloudinary.config({
+    cloud_name: `${process.env.CLOUDINARY_CLOUD_NAME}`,
+    api_key: `${process.env.CLOUDINARY_API_KEY}`,
+    api_secret: `${process.env.CLOUDINARY_SECRET_KEY}`,
+});
 
 const app = express()
 
 app.use(express.json())
-const port = process.env.PORT || 5000
+const port = process.env.PORT || 5000 
 
-app.use('/api/user',userRoutes)
+app.use('/api/user', userRoutes)
+app.use('/api/uploadimage',uploadRoutes)
 app.use(notFound)
 app.use(errorHandler)
-
+ 
 // app.get('/', (req, res) => res.send('Hello World!'))
 // app.get('/api/chat', (req, res) => {
 //     res.send(chats)

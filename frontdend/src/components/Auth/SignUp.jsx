@@ -1,17 +1,20 @@
-import { Button, FormControl, FormLabel, Input, VStack } from "@chakra-ui/react";
-import React from "react";
+import { Button, FormControl, FormLabel, Image, Input, VStack } from "@chakra-ui/react";
+import React, { useState } from "react";
 import CustomInput from "../common/CustomInput"
 import { Formik, Form } from 'formik';
 import { SignUpSchema } from "./schemas/SignUpSchema";
 import CustomFileUpload from "../common/CustomFileUpload";
+import signin from "../../assets/signup.svg";
+
 
 let initialState = {
   name: '',
   email: '',
   password: '',
   confirmPassword: '',
-  profileUrl: '',
-  profileName:''
+  profile: '',
+  imageId: '',
+  imageLoading:false
 }
 
 const SignUp = (props) => {
@@ -52,6 +55,8 @@ const SignUp = (props) => {
   }
 
   return <>
+    <Image src={signin} h={'150px'} w={'150px'} mx={'auto'} my={'5'} border={'3px solid white'} p={2} borderRadius={'80%'} shadow={'3px 3px 7px black'} />
+
     <Formik
       initialValues={initialState}
       validationSchema={SignUpSchema}
@@ -61,7 +66,7 @@ const SignUp = (props) => {
       }}
     >
       {
-        ({ setFieldValue }) => (
+        ({ setFieldValue, values }) => (
 
           <Form>
             <VStack>
@@ -70,7 +75,7 @@ const SignUp = (props) => {
               <CustomInput field={signUpObject.password} />
               <CustomInput field={signUpObject.confirmPassword} />
               <CustomFileUpload field={signUpObject.profile} setFieldValue={setFieldValue} />
-              <Button type="submit" bg="teal.600"
+              <Button type="submit" bg="teal.600" isLoading={values['imageLoading']||false}
                 color="white"
                 _hover={{ bg: 'teal.700' }} mt={4} w={'100%'}>Register</Button>
             </VStack>
