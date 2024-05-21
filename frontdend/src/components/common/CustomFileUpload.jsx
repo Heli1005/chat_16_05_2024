@@ -4,11 +4,11 @@ import Axios from "axios";
 import { Field } from 'formik';
 import CustomToolTip from "./CustomToolTip";
 
-const CustomFileUpload = ({ field, setFieldValue, setImageLoading }) => <Field component={FormField} field={field} setProfile={setFieldValue} setImageLoading={setImageLoading} />
+const CustomFileUpload = ({ field, setFieldValue, setsignupLoading }) => <Field component={FormField} field={field} setProfile={setFieldValue} setsignupLoading={setsignupLoading} />
 
 export default CustomFileUpload;
 
-const FormField = ({ field, form, setProfile, setImageLoading }) => {
+const FormField = ({ field, form, setProfile, setsignupLoading }) => {
 
     const toast = useToast()
 
@@ -22,17 +22,17 @@ const FormField = ({ field, form, setProfile, setImageLoading }) => {
     };
 
     const handleRemoveImage = async () => {
-        await setProfile('imageLoading', true);
+        await setProfile('signupLoading', true);
         await handleDeleteUploadedImage()
         await setProfile(field.id, '');
         await setProfile('imageId', '');
-        await setProfile('imageLoading', false);
+        await setProfile('signupLoading', false);
 
 
     }
 
     const handleFileChange = async (event, setProfileObj) => {
-        await setProfile('imageLoading', true);
+        await setProfile('signupLoading', true);
 
         const file = event.target.files[0];
         if (file) {
@@ -43,7 +43,7 @@ const FormField = ({ field, form, setProfile, setImageLoading }) => {
                 setProfileObj('imageId', uploadedImageObj.public_id);// URL.createObjectURL(file)
             } else {
                 toast({
-                    title: 'Something went wrong please try after some time',
+                    title: `'Something went wrong please try after some time'`,
                     description: "We've created your account for you.",
                     status: 'error',
                     duration: 5000,
@@ -59,7 +59,7 @@ const FormField = ({ field, form, setProfile, setImageLoading }) => {
                 isClosable: true,
             })
         }
-        await setProfile('imageLoading', false);
+        await setProfile('signupLoading', false);
     };
 
     const handleUpload = async (image) => {

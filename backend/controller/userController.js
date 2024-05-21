@@ -3,6 +3,8 @@ import { User } from "../models/UserSchema.js";
 import { generateWebToken } from "../config/generateToken.js";
 
 export const registerUser = asyncHandler(async (req, res,) => {
+    console.log("req", req);
+    
     const { name, email, password, profile } = req.body
     // field validation
     if (!name || !email || !password) {

@@ -27,6 +27,7 @@ const FormField = ({ field, form }) => {
             id={field.id}
             type={field.type || 'text'}
             bg={'white'}
+            // w={'50%'}
             h={'46px'}
             shadow={'3px 3px 7px gray'}
             name={field.id}

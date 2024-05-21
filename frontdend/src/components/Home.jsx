@@ -24,7 +24,7 @@ const Home = () => {
             <Login  setTabIndex={setTabIndex} />
             </TabPanel>
             <TabPanel>
-             <SignUp />
+              <SignUp setTabIndex={setTabIndex} />
             </TabPanel>
           </TabPanels>
         </Tabs>
