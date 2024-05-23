@@ -23,7 +23,7 @@ export const accessChat = asyncHandler(async (req, res,) => {
         .populate('lastestMessage')
 
     isChat = await User.populate(isChat, {
-        path: "latestMessage sender",
+        path: "latestMessage.sender",
         select: "name pic email"
     })
 
