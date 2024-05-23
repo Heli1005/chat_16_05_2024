@@ -16,6 +16,8 @@ export const protect = asyncHandler(async (req, res, next) => {
 
             // Decode token
             const decoded = jstoken.verify(token, process.env.JSONTOKEN_SECRET);
+            console.log("decoded", decoded);
+            
 
             // Fetch user without password
             let user = await User.findById(decoded.id).select('-password');
