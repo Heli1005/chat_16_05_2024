@@ -3,8 +3,7 @@ import { User } from "../models/UserSchema.js";
 import { generateWebToken } from "../config/generateToken.js";
 
 export const registerUser = asyncHandler(async (req, res,) => {
-    console.log("req", req);
-    
+
     const { name, email, password, profile } = req.body
     // field validation
     if (!name || !email || !password) {
@@ -60,4 +59,19 @@ export const authUser = asyncHandler(async (req, res) => {
         res.status(400);
         throw new Error('Invalid User or Password')
     }// user not found
+})
+
+export const allUsers = asyncHandler(async (req, res) => {
+    
+    const keyword = req.query.search
+        ? {
+            $or: [
+                { name: { $regex: req.query.search, $options: "i" } },
+                { email: { $regex: req.query.search, $options: "i" } },
+            ],
+        }
+        : {};
+
+    const users = await User.find(keyword).find({ _id: { $ne: req.user._id } }).select('-password');
+    res.send(users);
 })
