@@ -137,9 +137,9 @@ const FormField = ({ field, form, setProfile, setsignupLoading }) => {
             />
 
             <Button bg={'white'} variant='outline' shadow={'3px 3px 7px gray'} borderColor={errorBorder} size="xl" w={'100%'} pl={1} py={1} pr={1} onClick={handleButtonClick}>
-                <HStack w={'100%'} d={'flex'} justifyContent={'space-between'}  >
+                <HStack w={'100%'} display={'flex'} justifyContent={'space-between'}  >
                     <Text fontSize="lg" bg={'teal.600'} color={'white'} fontWeight={'400'} mx={0} px={4} py={4} borderRadius={5}>
-                        {` Upload ${field.label}`}
+                        {`Upload ${field.label}`}
                     </Text>
                     {
                         (values[field.id]) &&

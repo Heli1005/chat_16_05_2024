@@ -5,9 +5,13 @@ import { useLocation, useNavigate } from "react-router-dom";
 const userContext = createContext()
 
 const AuthProvider = ({ children }) => {
-    const [user, setUser] = useState(null);
+
     const [current, setCurrentUser] = UseLocalStorage('user', {})
+    const [selectedChat, setSelectedChat] = useState(null);
+    const [chat, setChat] = useState(null);
+    const [user, setUser] = useState(current || null);
     const navigate = useNavigate()
+
     const handleLogin = async (userObj) => {
         await setUser(userObj)
         await setCurrentUser(userObj)
@@ -21,7 +25,7 @@ const AuthProvider = ({ children }) => {
     }
 
     return <>
-        <userContext.Provider value={{ user, handleLogOut, handleLogin }}>
+        <userContext.Provider value={{ user, handleLogOut, handleLogin, selectedChat, setSelectedChat, chat, setChat }}>
             {children}
         </userContext.Provider>
     </>;

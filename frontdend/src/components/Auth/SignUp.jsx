@@ -20,7 +20,7 @@ let initialState = {
 
 const SignUp = (props) => {
 
-  const toast=useToast()
+  const toast = useToast()
 
   let signUpObject = {
     name: {
@@ -57,7 +57,7 @@ const SignUp = (props) => {
     }
   }
   const handleRegister = async (req) => {
-    
+
     try {
       delete req['signupLoading']
       const config = {
@@ -65,12 +65,12 @@ const SignUp = (props) => {
           "Content-type": "application/json",
         },
       }
-      let res= await Axios.post('/api/user', {
+      let res = await Axios.post('/api/user', {
         ...req, config
       })
       console.log("res", res);
-  
-  
+
+
       await toast({
         title: 'User created successfully',
         description: "We've created your account for you.",
@@ -81,7 +81,7 @@ const SignUp = (props) => {
       await props.setTabIndex(0)
     } catch (error) {
       console.log("error", error);
-      
+
       await toast({
         // title:`${}`,
         title: `${error.response.data.message}`,
@@ -99,7 +99,7 @@ const SignUp = (props) => {
       initialValues={initialState}
       validationSchema={SignUpSchema}
       onSubmit={(values, actions) => {
-        
+
         let tempObj = { ...values }
         handleRegister(tempObj)
 

@@ -8,7 +8,8 @@ export default CustomInput;
 
 const FormField = ({ field, form }) => {
 
-    const { handleChange, touched, errors, handleBlur } = form
+    const { handleChange, touched, errors, handleBlur,values } = form
+    
     let isError = (errors && errors[field.id] && touched[field.id])
     let errorBorder = isError ? `red.500` : `teal.500`
 
@@ -27,11 +28,12 @@ const FormField = ({ field, form }) => {
             id={field.id}
             type={field.type || 'text'}
             bg={'white'}
-            // w={'50%'}
+            disabled={field.disabled||false}
             h={'46px'}
             shadow={'3px 3px 7px gray'}
             name={field.id}
             onChange={handleChange}
+            value={values[field.id]}
             onBlur={handleBlur}
             my={2}
             borderColor={errorBorder}
