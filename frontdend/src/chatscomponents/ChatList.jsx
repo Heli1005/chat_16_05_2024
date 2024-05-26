@@ -20,20 +20,17 @@ const ChatList = ({ userList, onClose }) => {
         fetchChats()
     }, [])
 
-    const fetchChats = async (userId) => {
+    const fetchChats = async () => {
         try {
             setLoading(true)
             let url = 'api/chat'
-            // let reqBody = {
-            //     userId
-            // }
             let config = {
                 headers: {
                     'Content-type': "application/json",
                     'Authorization': `Bearer ${user.token}`
                 }
             }
-            const { data } = await Axios.get(url, reqBody, config)
+            const { data } = await Axios.get(url, config)
             setChats(data)
             await setLoading(false)
         } catch (error) {
