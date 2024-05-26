@@ -1,41 +1,40 @@
 import { Avatar, Box, Text, useToast } from "@chakra-ui/react";
 import Axios from "axios";
-import React, { memo } from "react";
+import React, { memo, useState } from "react";
 import { authUser } from "../components/Auth/auth";
 
-const ChatList = ({ userList,onClose }) => {
+const ChatList = ({ userList, onClose }) => {
 
     const [loading, setLoading] = useState(false);
-    const toast=useToast()
+    const toast = useToast()
     let { user, chat, setChat, selectedChat, setSelectedChat } = authUser()
 
     const accessChat = async (userId) => {
-       try {
-         setLoading(true)
-         let url = 'api/user'
-         let reqBody = {
-             userId
-         }
-         let config = {
-             headers: {
-                 'Content-type': "application/json",
-                 Authorization: `Bearer ${user.token}`
-             }
-         }
-         const { data } = await Axios.post(url, reqBody, config)
-         await setSelectedChat(data)
-         await setLoading(false)
-         await onClose()
-       } catch (error) {
-        await toast({
-            title: 'Error occured!!!',
-            description: `${error.message}`,
-            status: 'error',
-            duration: 5000,
-            isClosable: true,
-        })
-       }
-
+        try {
+            setLoading(true)
+            let url = 'api/user'
+            let reqBody = {
+                userId
+            }
+            let config = {
+                headers: {
+                    'Content-type': "application/json",
+                    Authorization: `Bearer ${user.token}`
+                }
+            }
+            const { data } = await Axios.post(url, reqBody, config)
+            await setSelectedChat(data)
+            await setLoading(false)
+            await onClose()
+        } catch (error) {
+            await toast({
+                title: 'Error occured!!!',
+                description: `${error.message}`,
+                status: 'error',
+                duration: 5000,
+                isClosable: true,
+            })
+        }
     }
 
     return <div >
