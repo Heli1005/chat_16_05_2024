@@ -22,7 +22,7 @@ const ChatList = ({ userList, onClose }) => {
 
     const fetchChats = async () => {
         try {
-            setLoading(true)
+            await setLoading(true)
             let url = 'api/chat'
             let config = {
                 headers: {
@@ -31,7 +31,9 @@ const ChatList = ({ userList, onClose }) => {
                 }
             }
             const { data } = await Axios.get(url, config)
-            setChats(data)
+            console.log("data", data);
+            
+            await setChats(data)
             await setLoading(false)
         } catch (error) {
             await toast({
@@ -81,6 +83,7 @@ const ChatList = ({ userList, onClose }) => {
             flexDir="column"
             py={3}
             px={1}
+            mt={2}
             bg="#F8F8F8"
             w="100%"
             h="100%"
@@ -89,44 +92,48 @@ const ChatList = ({ userList, onClose }) => {
 
         >
             {
-                loading
+                (!loading)
                     ?
-                    (
-                        <Stack overflowY={'scroll'} >
-                            {
+                    chats?.length>0
+                        ?
+                        (
+                            <Stack overflowY={'scroll'} >
+                                {
 
 
-                                chats.map(chat => {
-                                    return <Box
-                                    onClick={()=>setSelectedChat(chat)}
-                                    cursor={'pointer'}
-                                    borderRadius={7}
-                                    w={'100%'}
-                                   px={3}
-                                    py={2}
-                                        bg={selectedChat._id === chat._id ? 'teal.500' : 'gray.200'}
-                                        color={selectedChat._id === chat._id ? 'white' :'teal.600'}
-                                    >
-                                        <Text>
-                                            {
-                                                !chat.isGroupChat
-                                                ?
-                                                getUserName(chat.users)
-                                                :
-                                                chat.chatName
+                                    chats.map(chat => {
+                                        return <Box
+                                            onClick={() => setSelectedChat(chat)}
+                                            cursor={'pointer'}
+                                            borderRadius={7}
+                                            w={'100%'}
+                                            px={3}
+                                            py={2}
+                                            bg={(selectedChat?._id === chat._id) ? 'teal.500' : 'gray.200'}
+                                            color={(selectedChat?._id === chat._id) ? 'white' : 'teal.600'}
+                                        >
+                                            <Text>
+                                                {
+                                                    !chat.isGroupChat
+                                                        ?
+                                                        getUserName(chat.users)
+                                                        :
+                                                        chat.chatName
 
-                                            }
-                                        </Text>
-                                    </Box>
-                                })
-                            }
-                        </Stack>
-                    )
+                                                }
+                                            </Text>
+                                        </Box>
+                                    })
+                                }
+                            </Stack>
+                        )
+                        :
+                        <Box display={'flex'} alignItems={'center'}>
+                            <Text color={'teal.600'} textAlign={'center'}  >No chats Exist</Text>
+                        </Box>
                     :
                     <ChatListLoading />
-
             }
-
         </Box>
     </Box>;
 };
