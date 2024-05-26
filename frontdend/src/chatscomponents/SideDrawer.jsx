@@ -7,7 +7,7 @@ import { authUser } from "../components/Auth/auth";
 import ProfileModal from "./ProfileModal";
 import ChatListLoading from "./ChatListLoading";
 import Axios from "axios";
-import ChatList from "./ChatList";
+import SearchedChatList from "./SearchedChatList";
 
 const SideDrawer = (props) => {
 
@@ -103,9 +103,9 @@ const SideDrawer = (props) => {
                             ?
                             <ChatListLoading />
                             :
-                            searchlist?.length > 0
+                            finalChatList?.length > 0
                                 ?
-                                <ChatList userList={finalChatList} onClose={onClose} />
+                                <SearchedChatList userList={finalChatList} onClose={onClose} />
                                 :
                                 <Box mt={8} textAlign={'center'} >
                                     <Text color={'teal.600'} fontSize={'xl'} fontWeight={'600'}>No chat found...</Text>

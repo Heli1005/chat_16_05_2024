@@ -8,7 +8,7 @@ const AuthProvider = ({ children }) => {
 
     const [current, setCurrentUser] = UseLocalStorage('user', {})
     const [selectedChat, setSelectedChat] = useState(null);
-    const [chat, setChat] = useState(null);
+    const [chats, setChats] = useState([]);
     const [user, setUser] = useState(current || null);
     const navigate = useNavigate()
 
@@ -25,7 +25,7 @@ const AuthProvider = ({ children }) => {
     }
 
     return <>
-        <userContext.Provider value={{ user, handleLogOut, handleLogin, selectedChat, setSelectedChat, chat, setChat }}>
+        <userContext.Provider value={{ user, handleLogOut, handleLogin, selectedChat, setSelectedChat, chats, setChats }}>
             {children}
         </userContext.Provider>
     </>;

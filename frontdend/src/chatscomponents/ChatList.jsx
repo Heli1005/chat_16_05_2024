@@ -1,31 +1,41 @@
-import { Avatar, Box, Text, useToast } from "@chakra-ui/react";
+import { Avatar, Box, Spinner, Stack, Text, useToast } from "@chakra-ui/react";
 import Axios from "axios";
-import React, { memo, useState } from "react";
+import { Button } from "@chakra-ui/button";
+import { AddIcon } from "@chakra-ui/icons";
+
+
+import React, { memo, useEffect, useState } from "react";
 import { authUser } from "../components/Auth/auth";
+import ChatListLoading from "./ChatListLoading";
+import { getUserName } from "../config/ChatLogic";
 
 const ChatList = ({ userList, onClose }) => {
+    console.log("chat list called...");
 
     const [loading, setLoading] = useState(false);
     const toast = useToast()
-    let { user, chat, setChat, selectedChat, setSelectedChat } = authUser()
+    let { user, chats, setChats, selectedChat, setSelectedChat } = authUser()
+    useEffect(() => {
 
-    const accessChat = async (userId) => {
+        fetchChats()
+    }, [])
+
+    const fetchChats = async (userId) => {
         try {
             setLoading(true)
-            let url = 'api/user'
-            let reqBody = {
-                userId
-            }
+            let url = 'api/chat'
+            // let reqBody = {
+            //     userId
+            // }
             let config = {
                 headers: {
                     'Content-type': "application/json",
-                    Authorization: `Bearer ${user.token}`
+                    'Authorization': `Bearer ${user.token}`
                 }
             }
-            const { data } = await Axios.post(url, reqBody, config)
-            await setSelectedChat(data)
+            const { data } = await Axios.get(url, reqBody, config)
+            setChats(data)
             await setLoading(false)
-            await onClose()
         } catch (error) {
             await toast({
                 title: 'Error occured!!!',
@@ -37,55 +47,91 @@ const ChatList = ({ userList, onClose }) => {
         }
     }
 
-    return <div >
-        {
-            userList?.map(user => {
-                console.log("user", user);
+    return <Box
+        bg={'white'}
+        borderRadius={'lg'}
+        w={{ base: '100%', md: '31%' }}
+        flexDirection={'column'}
+        p={3}
+        alignItems={'center'}
+        display={{ base: selectedChat ? 'none' : 'flex', md: 'flex' }}
+    >
+        <Box
+            display={'flex'}
+            w={'100%'}
+            alignItems={'center'}
 
-                return <Box
-                    key={user?._id}
-                    onClick={() => accessChat(user?._id)}
-                    bg={'gray.200'}
-                    px={2}
-                    py={3}
-                    my={2}
-                    _hover={{
-                        color: 'white',
-                        background: 'teal.500',
-                    }}
-                    borderRadius={7}
-                    display={'flex'}
-                    justifyContent={'space-start'}
-                    alignItems={'center'}
-                    gap={2}
-                    color={'teal.600'}
-                    cursor={'pointer'}
-                >
-                    <Avatar size={'sm'} cursor={"pointer"} name={user?.name} src={user?.profile} />
-                    <div>
-                        <Text
-                            // color={'teal.600'}
-                            _hover={{
-                                color: 'white',
-                                background: 'teal.500',
-                            }}
-                            casing={'capitalize'}
-                            fontWeight={'700'}>{user?.name}</Text>
-                        <Text
-                            // color={'teal.600'}
-                            _hover={{
-                                color: 'white',
-                                background: 'teal.500',
-                            }}
-                            casing={'capitalize'}
-                            fontWeight={'500'}
-                            fontSize={'12px'}>{user?.email}</Text>
-                    </div>
-                </Box>
-            })
-        }
+            fontSize={{ base: "18px", md: '25px' }}
+            justifyContent={'space-between'}
 
-    </div>;
+        >
+            <Text color={'teal.600'}>
+                My Chats
+            </Text>
+            <Button
+                variant={'solid'}
+                py={1}
+                px={2}
+                colorScheme="teal"
+                fontSize={{ base: '17px', md: '10px', lg: '12px' }}
+                rightIcon={<AddIcon />}
+            >
+                New Group
+            </Button>
+        </Box>
+        <Box
+            d="flex"
+            flexDir="column"
+            py={3}
+            px={1}
+            bg="#F8F8F8"
+            w="100%"
+            h="100%"
+            borderRadius="lg"
+            overflowY="hidden"
+
+        >
+            {
+                loading
+                    ?
+                    (
+                        <Stack overflowY={'scroll'} >
+                            {
+
+
+                                chats.map(chat => {
+                                    return <Box
+                                    onClick={()=>setSelectedChat(chat)}
+                                    cursor={'pointer'}
+                                    borderRadius={7}
+                                    w={'100%'}
+                                   px={3}
+                                    py={2}
+                                        bg={selectedChat._id === chat._id ? 'teal.500' : 'gray.200'}
+                                        color={selectedChat._id === chat._id ? 'white' :'teal.600'}
+                                    >
+                                        <Text>
+                                            {
+                                                !chat.isGroupChat
+                                                ?
+                                                getUserName(chat.users)
+                                                :
+                                                chat.chatName
+
+                                            }
+                                        </Text>
+                                    </Box>
+                                })
+                            }
+                        </Stack>
+                    )
+                    :
+                    <ChatListLoading />
+
+            }
+
+        </Box>
+    </Box>;
 };
 
 export default memo(ChatList);
