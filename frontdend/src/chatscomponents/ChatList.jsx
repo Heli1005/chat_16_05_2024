@@ -2,21 +2,19 @@ import { Avatar, Box, Spinner, Stack, Text, useToast } from "@chakra-ui/react";
 import Axios from "axios";
 import { Button } from "@chakra-ui/button";
 import { AddIcon } from "@chakra-ui/icons";
-
-
 import React, { memo, useEffect, useState } from "react";
 import { authUser } from "../components/Auth/auth";
 import ChatListLoading from "./ChatListLoading";
-import { getUserName } from "../config/ChatLogic";
+import GroupChatModal from "./GroupChatModal";
+import SingleChatUI from "./SingleChatNameUI";
 
-const ChatList = ({ userList, onClose }) => {
-    console.log("chat list called...");
+const ChatList = () => {
 
     const [loading, setLoading] = useState(false);
     const toast = useToast()
     let { user, chats, setChats, selectedChat, setSelectedChat } = authUser()
-    useEffect(() => {
 
+    useEffect(() => {
         fetchChats()
     }, [])
 
@@ -31,8 +29,7 @@ const ChatList = ({ userList, onClose }) => {
                 }
             }
             const { data } = await Axios.get(url, config)
-            console.log("data", data);
-            
+
             await setChats(data)
             await setLoading(false)
         } catch (error) {
@@ -48,7 +45,7 @@ const ChatList = ({ userList, onClose }) => {
 
     return <Box
         bg={'white'}
-        borderRadius={'lg'}
+        borderRadius={2}
         w={{ base: '100%', md: '31%' }}
         flexDirection={'column'}
         p={3}
@@ -59,24 +56,25 @@ const ChatList = ({ userList, onClose }) => {
             display={'flex'}
             w={'100%'}
             alignItems={'center'}
-
             fontSize={{ base: "18px", md: '25px' }}
             justifyContent={'space-between'}
-
         >
             <Text color={'teal.600'}>
                 My Chats
             </Text>
-            <Button
-                variant={'solid'}
-                py={1}
-                px={2}
-                colorScheme="teal"
-                fontSize={{ base: '17px', md: '10px', lg: '12px' }}
-                rightIcon={<AddIcon />}
-            >
-                New Group
-            </Button>
+            <GroupChatModal>
+
+                <Button
+                    variant={'solid'}
+                    py={1}
+                    px={2}
+                    colorScheme="teal"
+                    fontSize={{ base: '17px', md: '10px', lg: '12px' }}
+                    rightIcon={<AddIcon />}
+                >
+                    New Group
+                </Button>
+            </GroupChatModal>
         </Box>
         <Box
             d="flex"
@@ -89,40 +87,17 @@ const ChatList = ({ userList, onClose }) => {
             h="100%"
             borderRadius="lg"
             overflowY="hidden"
-
         >
             {
                 (!loading)
                     ?
-                    chats?.length>0
+                    chats?.length > 0
                         ?
                         (
                             <Stack overflowY={'scroll'} >
                                 {
-
-
-                                    chats.map(chat => {
-                                        return <Box
-                                            onClick={() => setSelectedChat(chat)}
-                                            cursor={'pointer'}
-                                            borderRadius={7}
-                                            w={'100%'}
-                                            px={3}
-                                            py={2}
-                                            bg={(selectedChat?._id === chat._id) ? 'teal.500' : 'gray.200'}
-                                            color={(selectedChat?._id === chat._id) ? 'white' : 'teal.600'}
-                                        >
-                                            <Text>
-                                                {
-                                                    !chat.isGroupChat
-                                                        ?
-                                                        getUserName(chat.users)
-                                                        :
-                                                        chat.chatName
-
-                                                }
-                                            </Text>
-                                        </Box>
+                                    chats.map(user => {
+                                        return <SingleChatUI key={user._id} user={user} />
                                     })
                                 }
                             </Stack>

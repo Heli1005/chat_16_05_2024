@@ -7,7 +7,6 @@ import CustomFileUpload from "../common/CustomFileUpload";
 import signin from "../../assets/signup.svg";
 import Axios from "axios";
 
-
 let initialState = {
   name: '',
   email: '',
