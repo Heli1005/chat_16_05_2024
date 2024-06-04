@@ -1,12 +1,12 @@
 import { Box, Button, Icon, IconButton, Image, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, VStack, useDisclosure } from "@chakra-ui/react";
 import { ViewIcon } from "@chakra-ui/icons";
-
 import React from "react";
 import CustomInput from "../components/common/CustomInput";
 import { Form, Formik } from "formik";
 
-
 const ProfileModal = ({ user, children }) => {
+    console.log("user", user);
+    
 
     let initialState = {
         name: user.name || 'ok',
@@ -57,33 +57,26 @@ const ProfileModal = ({ user, children }) => {
                 :
                 <IconButton display={{ base: 'flex' }} icon={<ViewIcon />} onClick={onOpen} />
         }
-        <Modal size={'xl'} isCentered isOpen={isOpen} onClose={onClose}>
+        <Modal size={'md'} isCentered isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
-            <ModalContent p={'3px'} bg={'gray.100'}>
-                <ModalHeader borderRadius={'7px'} display={'flex'} alignItems={'center'} fontWeight={'700'} bg={'teal'} color={"white"} p={4} justifyContent={'center'} fontSize={'larger'} >
-                    <Text >My Profile</Text>
-                    <ModalCloseButton />
-                </ModalHeader>
-                <ModalBody>
-                    <Box display={'flex'} gap={'5px'} justifyContent={'space-between'}>
-
-                        <Image borderr src={user.profile} boxSize={'200px'} border={'2px solid white'} p={0} borderRadius={'full'} shadow={'3px 3px 7px black'} />
+            <ModalContent p={'3px'} h={'60%'} bg={'gray.100'}>
+                <ModalBody h={'100%'} p={4} >
+                    <Box display={'block'} h={'100%'} alignItems={'center'} >
+                        <Box display={'flex'} mb={3} justifyContent={'center'}>
+                            <Image src={user.profile} textAlign={'center'} boxSize={'200px'} border={'2px solid white'} p={0} borderRadius={'full'} shadow={'3px 3px 7px black'} />
+                        </Box>
                         <div>
                             <Formik
                                 initialValues={initialState}
                                 onSubmit={(values, actions) => {
-
                                     let tempObj = { ...values }
                                     handleRegister(tempObj)
-
                                 }}
                             >
                                 {
                                     ({ values }) => (
 
                                         <Form>
-
-
                                             <VStack>
                                                 <CustomInput field={profileObj.name} />
                                                 <CustomInput field={profileObj.email} />
@@ -94,14 +87,7 @@ const ProfileModal = ({ user, children }) => {
                             </Formik>
                         </div>
                     </Box>
-                </ModalBody>
-
-                <ModalFooter my={3} >
-                    {/* <Button colorScheme='blue' mr={3} onClick={onClose}>
-                        Close
-                    </Button>
-                    <Button variant='ghost'>Secondary Action</Button> */}
-                </ModalFooter>
+                </ModalBody> 
             </ModalContent>
         </Modal>
     </>;

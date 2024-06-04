@@ -16,11 +16,12 @@ const SingleChatUI = ({ user }) => {
             borderRadius={7}
             w={'100%'}
             px={3}
+          
             py={2}
             bg={(selectedChat?._id === user._id) ? 'teal.500' : 'gray.200'}
             color={(selectedChat?._id === user._id) ? 'white' : 'teal.600'}
         >
-            <Text>
+            <Text casing={'capitalize'} >
                 
                 {
                     !user.isGroupChat

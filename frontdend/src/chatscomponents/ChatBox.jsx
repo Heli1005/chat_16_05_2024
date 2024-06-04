@@ -1,6 +1,7 @@
 import { Box, Text } from "@chakra-ui/react";
 import React from "react";
 import { authUser } from "../components/Auth/auth";
+import SingleChat from "./SingleChat";
 
 const ChatBox = (props) => {
 
@@ -16,9 +17,7 @@ const ChatBox = (props) => {
              borderWidth={1}
             bg={'white'}
         >
-            <Text>
-                Single chat
-            </Text>
+           <SingleChat />
         </Box>
     </>;
 };

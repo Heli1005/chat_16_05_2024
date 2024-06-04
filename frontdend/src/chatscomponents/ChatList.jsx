@@ -1,4 +1,4 @@
-import { Avatar, Box, Spinner, Stack, Text, useToast } from "@chakra-ui/react";
+import { Box, Stack, Text, useToast } from "@chakra-ui/react";
 import Axios from "axios";
 import { Button } from "@chakra-ui/button";
 import { AddIcon } from "@chakra-ui/icons";
@@ -63,7 +63,6 @@ const ChatList = () => {
                 My Chats
             </Text>
             <GroupChatModal>
-
                 <Button
                     variant={'solid'}
                     py={1}
@@ -110,7 +109,7 @@ const ChatList = () => {
                     <ChatListLoading />
             }
         </Box>
-    </Box>;
-};
+    </Box>
+}
 
-export default memo(ChatList);
+export default memo(ChatList)
