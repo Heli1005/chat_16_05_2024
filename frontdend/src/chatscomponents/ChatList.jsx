@@ -8,15 +8,16 @@ import ChatListLoading from "./ChatListLoading";
 import GroupChatModal from "./GroupChatModal";
 import SingleChatUI from "./SingleChatNameUI";
 
-const ChatList = () => {
+const ChatList = ({ fetchAgain }) => {
 
     const [loading, setLoading] = useState(false);
     const toast = useToast()
+    
     let { user, chats, setChats, selectedChat, setSelectedChat } = authUser()
 
     useEffect(() => {
         fetchChats()
-    }, [])
+    }, [fetchAgain])
 
     const fetchChats = async () => {
         try {
@@ -96,7 +97,7 @@ const ChatList = () => {
                             <Stack overflowY={'scroll'} >
                                 {
                                     chats.map(user => {
-                                        return <SingleChatUI key={user._id} user={user} />
+                                        return <SingleChatUI key={user._id} user={user}  />
                                     })
                                 }
                             </Stack>

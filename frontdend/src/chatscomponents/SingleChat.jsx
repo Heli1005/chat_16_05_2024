@@ -4,11 +4,11 @@ import { Box, IconButton, Text } from "@chakra-ui/react";
 import { ArrowBackIcon, ViewIcon } from "@chakra-ui/icons";
 import { getUserFullDetail, getUserName } from "../config/ChatLogic";
 import ProfileModal from "./ProfileModal";
+import GroupChatProfileModal from "./GroupChatProfileModal";
 
 
-const SingleChat = () => {
+const SingleChat = ({fetchAgain, setFetchAgain}) => {
     const { selectedChat, setSelectedChat } = authUser()
-    console.log("selectedChat", selectedChat);
 
     return <>
         {
@@ -43,12 +43,24 @@ const SingleChat = () => {
                                     </>
                             }
                         </Text>
-                        <ProfileModal isGroupChat={selectedChat?.isGroupChat} user={selectedChat?.isGroupChat ? selectedChat.users : getUserFullDetail(selectedChat.users)}>
+                        {
+                            selectedChat?.isGroupChat
+                            ?
+                                <GroupChatProfileModal fetchAgain={fetchAgain} setFetchAgain={setFetchAgain} user={ selectedChat.users} >
+                                    <IconButton
+                                        display={{ base: 'flex' }}
+                                        icon={<ViewIcon />}
+                                    />
+                                </GroupChatProfileModal>
+                            :
+
+                        <ProfileModal user={selectedChat?.isGroupChat ? selectedChat.users : getUserFullDetail(selectedChat.users)}>
                             <IconButton
                                 display={{ base: 'flex' }}
                                 icon={<ViewIcon />}
-                            />
+                                />
                         </ProfileModal>
+                            }
                     </Box>
                 </>
                 :

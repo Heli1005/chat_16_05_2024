@@ -5,7 +5,6 @@ import CustomInput from "../components/common/CustomInput";
 import { Form, Formik } from "formik";
 
 const ProfileModal = ({ user, children }) => {
-    console.log("user", user);
     
 
     let initialState = {

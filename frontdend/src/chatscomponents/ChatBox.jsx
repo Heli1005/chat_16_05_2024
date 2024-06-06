@@ -17,7 +17,7 @@ const ChatBox = (props) => {
              borderWidth={1}
             bg={'white'}
         >
-           <SingleChat />
+           <SingleChat fetchAgain={props.fetchAgain} setFetchAgain={props.setFetchAgain} />
         </Box>
     </>;
 };
