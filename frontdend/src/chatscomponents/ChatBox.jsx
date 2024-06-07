@@ -1,11 +1,14 @@
 import { Box, Text } from "@chakra-ui/react";
-import React from "react";
+import React, { useEffect } from "react";
 import { authUser } from "../components/Auth/auth";
 import SingleChat from "./SingleChat";
-
+ 
 const ChatBox = (props) => {
 
     let { selectedChat } = authUser()
+    useEffect(()=>{
+        console.log("setFetchAgain" );
+    },[props.fetchAgain])
 
     return <>
         <Box

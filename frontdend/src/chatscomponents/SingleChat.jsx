@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { authUser } from "../components/Auth/auth";
 import { Box, IconButton, Text } from "@chakra-ui/react";
 import { ArrowBackIcon, ViewIcon } from "@chakra-ui/icons";
@@ -9,6 +9,11 @@ import GroupChatProfileModal from "./GroupChatProfileModal";
 
 const SingleChat = ({fetchAgain, setFetchAgain}) => {
     const { selectedChat, setSelectedChat } = authUser()
+    console.log("fetchAgain", fetchAgain);
+    
+    useEffect(()=>{
+        console.log("user signle chat");
+    },[fetchAgain])
 
     return <>
         {

@@ -4,10 +4,14 @@ import SideDrawer from "../chatscomponents/SideDrawer";
 import ChatList from "../chatscomponents/ChatList";
 import ChatBox from "../chatscomponents/ChatBox";
 import { Box } from "@chakra-ui/react";
+import { useEffect } from "react";
 
 const Chat = (props) => {
 
     const [fetchAgain, setFetchAgain] = useState(false);
+    useEffect(() => {
+        console.log("chat... useffect",setFetchAgain);
+    }, [fetchAgain])
 
     return <div style={{ width: '100%' }}>
         <RegisteredUser>
