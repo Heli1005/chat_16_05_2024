@@ -17,7 +17,6 @@ const ChatList = ({ fetchAgain }) => {
 
     useEffect(() => {
         fetchChats()
-        console.log("useeffect...");
     }, [fetchAgain])
 
     const fetchChats = async () => {

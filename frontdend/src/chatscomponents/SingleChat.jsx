@@ -6,14 +6,9 @@ import { getUserFullDetail, getUserName } from "../config/ChatLogic";
 import ProfileModal from "./ProfileModal";
 import GroupChatProfileModal from "./GroupChatProfileModal";
 
+const SingleChat = ({ toggleFetchAgain }) => {
 
-const SingleChat = ({fetchAgain, setFetchAgain}) => {
     const { selectedChat, setSelectedChat } = authUser()
-    console.log("fetchAgain", fetchAgain);
-    
-    useEffect(()=>{
-        console.log("user signle chat");
-    },[fetchAgain])
 
     return <>
         {
@@ -50,22 +45,22 @@ const SingleChat = ({fetchAgain, setFetchAgain}) => {
                         </Text>
                         {
                             selectedChat?.isGroupChat
-                            ?
-                                <GroupChatProfileModal fetchAgain={fetchAgain} setFetchAgain={setFetchAgain} user={ selectedChat.users} >
+                                ?
+                                <GroupChatProfileModal toggleFetchAgain={toggleFetchAgain} user={selectedChat.users} >
                                     <IconButton
                                         display={{ base: 'flex' }}
                                         icon={<ViewIcon />}
                                     />
                                 </GroupChatProfileModal>
-                            :
+                                :
 
-                        <ProfileModal user={selectedChat?.isGroupChat ? selectedChat.users : getUserFullDetail(selectedChat.users)}>
-                            <IconButton
-                                display={{ base: 'flex' }}
-                                icon={<ViewIcon />}
-                                />
-                        </ProfileModal>
-                            }
+                                <ProfileModal user={selectedChat?.isGroupChat ? selectedChat.users : getUserFullDetail(selectedChat.users)}>
+                                    <IconButton
+                                        display={{ base: 'flex' }}
+                                        icon={<ViewIcon />}
+                                    />
+                                </ProfileModal>
+                        }
                     </Box>
                 </>
                 :

@@ -8,23 +8,19 @@ import ConfirmationModal from "../components/common/ConfirmationModal";
 import CustomInuputWithForm from "../components/common/CustomInuputWithOutForm";
 import SingleSearchUserUI from "./SingleSearchUserUI";
 
-const GroupChatProfileModal = ({ children, fetchAgain, setFetchAgain }) => {
-    console.log("setF", setFetchAgain);
-    
-    useEffect(() => {
-        console.log("GroupChatProfileModal");
-    }, [fetchAgain])
+const GroupChatProfileModal = ({ children, toggleFetchAgain }) => {
+
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [chatName, setChatName] = useState("");
     const [search, setSearch] = useState('');
     const [loading, setLoading] = useState(false);
     const [searchResult, setSearchResult] = useState([]);
-
     const { user, selectedChat, setSelectedChat } = authUser()
     const [groupRenameLoading, setGroupRenameLoading] = useState(false);
     const [addRemoveUserLoading, setAddRemoveUserLoading] = useState();
 
     const toast = useToast()
+    console.log("selectedChat", selectedChat);
 
     const addLoader = async (key, val) => {
         let temp = { ...addRemoveUserLoading }
@@ -67,7 +63,12 @@ const GroupChatProfileModal = ({ children, fetchAgain, setFetchAgain }) => {
                 }
             }
             let { data } = await Axios.put(url, req, config)
-            // await setSelectedChat(data)
+            await setSelectedChat(data)
+            await toggleFetchAgain()
+            await setSearchResult([])
+            if(user._id===id &&action==='remove'){
+                await onClose()
+            }
 
         } catch (error) {
             await toast({
@@ -96,7 +97,8 @@ const GroupChatProfileModal = ({ children, fetchAgain, setFetchAgain }) => {
                 chatName
             }
             const { data } = await Axios.put(url, req, config)
-            await setFetchAgain(prev=>!prev)
+            await toggleFetchAgain()
+            await setSelectedChat(data)
         } catch (error) {
             await toast({
                 title: 'Error occured!!!',
@@ -109,12 +111,6 @@ const GroupChatProfileModal = ({ children, fetchAgain, setFetchAgain }) => {
         await setGroupRenameLoading(false)
     }
 
-    const handleSubmit = async () => {
-
-    }
-
-
-
     let groupChat = {
 
         user: {
@@ -123,7 +119,6 @@ const GroupChatProfileModal = ({ children, fetchAgain, setFetchAgain }) => {
             placeHolder: "Search user and Add..",
             isrequired: true,
             type: 'text'
-
         }
     }
 
@@ -143,13 +138,9 @@ const GroupChatProfileModal = ({ children, fetchAgain, setFetchAgain }) => {
         setLoading(true)
         try {
             const { data } = await Axios.get(`${url}${username}`, config)
-            console.log("selectedChat.users", data, selectedChat.users);
             let usrlist = selectedChat.users
             let tempdata = data.filter(obj => !usrlist.some(obj2 => obj2._id === obj._id)) || []
-            console.log("tempdata", tempdata);
-            debugger
-
-            setSearchResult(tempdata)
+            await setSearchResult(tempdata)
 
         } catch (error) {
             await toast({
@@ -244,7 +235,7 @@ const GroupChatProfileModal = ({ children, fetchAgain, setFetchAgain }) => {
                                                                     bg: 'red.600'
                                                                 }}
                                                                 // onClick={() => handleAddDeleteUser(usr._id)}
-                                                                 pl={1} />
+                                                                pl={1} />
                                                         </ConfirmationModal>
                                                 }
                                             </Box>

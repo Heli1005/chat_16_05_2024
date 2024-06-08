@@ -9,9 +9,11 @@ import { useEffect } from "react";
 const Chat = (props) => {
 
     const [fetchAgain, setFetchAgain] = useState(false);
-    useEffect(() => {
-        console.log("chat... useffect",setFetchAgain);
-    }, [fetchAgain])
+    
+
+    const toggleFetchAgain = () => {
+        setFetchAgain(prev => !prev); // This toggles the state
+    };
 
     return <div style={{ width: '100%' }}>
         <RegisteredUser>
@@ -23,7 +25,7 @@ const Chat = (props) => {
                 <ChatList fetchAgain={fetchAgain} />
             </RegisteredUser>
             <RegisteredUser>
-                <ChatBox fetchAgain={fetchAgain} setFetchAgain={setFetchAgain} />
+                <ChatBox toggleFetchAgain={toggleFetchAgain} />
             </RegisteredUser>
         </Box>
     </div>
