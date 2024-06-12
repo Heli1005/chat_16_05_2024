@@ -66,7 +66,7 @@ const GroupChatProfileModal = ({ children, toggleFetchAgain }) => {
             await setSelectedChat(data)
             await toggleFetchAgain()
             await setSearchResult([])
-            if(user._id===id &&action==='remove'){
+            if (user._id === id && action === 'remove') {
                 await onClose()
             }
 
