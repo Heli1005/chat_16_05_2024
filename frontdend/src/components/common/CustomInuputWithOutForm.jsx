@@ -15,6 +15,7 @@ const CustomInuputWithForm = ({ value, field, handleChange }) => {
         onChange={(e) => handleChange(e.target.value)}
         value={value || ''}
         my={2}
+        
         placeholder={field?.placeHolder ? field.placeHolder:`Enter ${field.label}`}
       />
     </FormControl>
