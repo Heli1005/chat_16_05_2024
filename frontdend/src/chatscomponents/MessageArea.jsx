@@ -1,13 +1,13 @@
 import React from "react";
 import ScrollableFeed from "react-scrollable-feed";
 import { isSameUser, lastMessage } from "../config/ChatLogic";
-import { Avatar, Box, Text } from "@chakra-ui/react";
+import { Avatar, Box, Text, background } from "@chakra-ui/react";
 import { authUser } from "../components/Auth/auth";
 
 const MessageArea = ({ messages }) => {
     const { user } = authUser()
-    return <>
-        <ScrollableFeed style={{paddingBottom:'0'}}>
+    return < >
+        <ScrollableFeed style={{padding:'0',background:'green'}}>
             {
                 messages &&
                 messages?.map((msg, i) => {
@@ -44,7 +44,7 @@ const MessageArea = ({ messages }) => {
                             maxW={'75%'}
                             borderEndEndRadius={loggedInUser ? '0' : '12px'}
                             borderEndStartRadius={!loggedInUser ? '0' : '12px'}
-                        > {msg.content} </Text>
+                        > {msg?.content} </Text>
                     </Box>
                 })
             }

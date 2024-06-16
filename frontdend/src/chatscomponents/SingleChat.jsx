@@ -8,9 +8,17 @@ import GroupChatProfileModal from "./GroupChatProfileModal";
 import CustomInuputWithForm from "../components/common/CustomInuputWithOutForm";
 import CustomInputGroup from "../components/common/CustomInputGroup";
 import Axios from "axios";
-import   "./signlechat.css";
+import "./signlechat.css";
 import MessageArea from "./MessageArea";
+import io from "socket.io-client";
+import Lottie from "react-lottie";
+import typinganimation from "../assets/typing.json";
 
+
+
+
+let ENDPOINT = 'http://localhost:5000'
+var socket, selectedChatCompare;
 
 const SingleChat = ({ toggleFetchAgain }) => {
 
@@ -18,49 +26,105 @@ const SingleChat = ({ toggleFetchAgain }) => {
     const toast = useToast()
     const [message, setMessage] = useState('');
     const [messages, setMessages] = useState([]);
-
+    const [socketConnected, setSocketConnected] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [typing, setTyping] = useState(false);
+    const [isSomeOneTyping, setIsSomeOneTyping] = useState(false);
 
+    let defaultOptions = {
+        loop: true,
+        autoplay: true,
+        animationData: typinganimation,
+        renderSettings: {
+            preserveAspectRatio: "xMidyMid slice"
+        }
+
+    }
 
     let messageInput = {
         id: 'message',
         placeHolder: 'Type your message here...',
-
     }
 
     const handleMessage = (val) => {
         setMessage(val)
+        //typing socket
+        if (!socketConnected)
+            return;
+
+        if (!typing) {
+            socket.emit("typing", selectedChat._id)
+            setTyping(true)
+        }
+
+        let lastTypingTime = new Date().getTime()
+        let timerLength = 3000
+
+        setTimeout(() => {
+            let nowTime = new Date().getTime()
+            let diff = nowTime - lastTypingTime
+            if (diff >= timerLength && typing) {
+                setTyping(false)
+                socket.emit('stop typing', selectedChat._id)
+            }
+        }, timerLength);
     }
 
     useEffect(() => {
+        socket = io(ENDPOINT)
+        socket.emit("setup", user)
+        socket.on("connected", () => setSocketConnected(true))
+        socket.on("typing", () => setIsSomeOneTyping(true))
+        socket.on("stop typing", () => setIsSomeOneTyping(false))
+    }, [])
+
+    useEffect(() => {
         fetchChats()
+        selectedChatCompare = selectedChat
     }, [selectedChat])
+
+    useEffect(() => {
+        socket.on('new-message-received', (newmsg) => {
+
+            console.log("newmsg", selectedChatCompare, newmsg);
+
+            //notification
+            if (!selectedChatCompare || selectedChatCompare._id !== newmsg.chat._id) {
+                console.log('if');
+            } else {
+                console.log("el");
+                setMessages([...messages, newmsg])
+            }
+            // message append
+        })
+    })
 
     const fetchChats = async () => {
         setLoading(true)
-        if (selectedChat){
+        if (selectedChat) {
 
-        try {
-            let url = `api/message/${selectedChat._id}`
-            let config = {
-                headers: {
-                    Authorization: `Bearer ${user.token}`
+            try {
+                let url = `api/message/${selectedChat._id}`
+                let config = {
+                    headers: {
+                        Authorization: `Bearer ${user.token}`
+                    }
                 }
-            }
 
-            let { data } = await Axios.get(url, config)
-            setMessages(data)
-        } catch (error) {
-            await toast({
-                title: error.message,
-                description: "Failed to load search result4",
-                status: 'error',
-                duration: 5000,
-                isClosable: true,
-            })
+                let { data } = await Axios.get(url, config)
+                setMessages(data)
+                socket.emit('join-chat', selectedChat._id)
+            } catch (error) {
+                await toast({
+                    title: error.message,
+                    description: "Failed to load search result4",
+                    status: 'error',
+                    duration: 5000,
+                    isClosable: true,
+                })
+            }
+            setLoading(false)
         }
-        setLoading(false)
-    }
     }
 
 
@@ -68,7 +132,7 @@ const SingleChat = ({ toggleFetchAgain }) => {
 
         setMessage('')
         try {
-            if (message) { 
+            if (message) {
 
                 let url = `api/message`
                 let req = {
@@ -83,6 +147,8 @@ const SingleChat = ({ toggleFetchAgain }) => {
                 }
 
                 let { data } = await Axios.post(url, req, config)
+                socket.emit("new-message", data)
+                socket.emit("stop typing",selectedChat._id)
                 setMessages([...messages, data])
             }
         } catch (error) {
@@ -141,7 +207,6 @@ const SingleChat = ({ toggleFetchAgain }) => {
                                     />
                                 </GroupChatProfileModal>
                                 :
-
                                 <ProfileModal user={selectedChat?.isGroupChat ? selectedChat.users : getUserFullDetail(selectedChat.users)}>
                                     <IconButton
                                         display={{ base: 'flex' }}
@@ -186,13 +251,26 @@ const SingleChat = ({ toggleFetchAgain }) => {
                                             margin="auto" />
                                     </Box>
                                     :
-                                        
-                                    <Box className="message" h={'100%'}  maxH={'90%'}  overflowY={'scroll'} >
+                                    <Box className="message" h={'100%'} maxH={'90%'} p={0} overflowY={'scroll'} >
                                         <MessageArea messages={messages} />
+                                        {
+                                            isSomeOneTyping
+                                                ?
+                                                <Box as="div" display={'flex'} mb={0} ml={3} justifyContent={'start'}  >
+                                                    <Lottie
+                                                        options={defaultOptions}
+                                                        width={70}
+                                                        style={{
+                                                            marginLeft: '10px',
+                                                            
+                                                        }}
+                                                    />
+                                                </Box>
+                                                :
+                                                <></>
+                                        } 
                                     </Box>
-                            }
-
-                            {/* messages */}
+                            } 
                             <CustomInputGroup value={message} onClick={submitMessage} loading={loading}
                                 icon={
                                     <IconButton aria-label='Add to friends' _hover={{ bg: 'teal.500' }} color={'white'} bg={'teal.500'}
