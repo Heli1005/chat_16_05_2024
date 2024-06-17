@@ -14,15 +14,12 @@ import io from "socket.io-client";
 import Lottie from "react-lottie";
 import typinganimation from "../assets/typing.json";
 
-
-
-
 let ENDPOINT = 'http://localhost:5000'
 var socket, selectedChatCompare;
 
 const SingleChat = ({ toggleFetchAgain }) => {
 
-    const { selectedChat, setSelectedChat, user } = authUser()
+    const { selectedChat, setSelectedChat, user, notificationList, setNotificationList } = authUser()
     const toast = useToast()
     const [message, setMessage] = useState('');
     const [messages, setMessages] = useState([]);
@@ -38,7 +35,6 @@ const SingleChat = ({ toggleFetchAgain }) => {
         renderSettings: {
             preserveAspectRatio: "xMidyMid slice"
         }
-
     }
 
     let messageInput = {
@@ -86,16 +82,14 @@ const SingleChat = ({ toggleFetchAgain }) => {
     useEffect(() => {
         socket.on('new-message-received', (newmsg) => {
 
-            console.log("newmsg", selectedChatCompare, newmsg);
 
             //notification
             if (!selectedChatCompare || selectedChatCompare._id !== newmsg.chat._id) {
-                console.log('if');
+                setNotificationList([newmsg, ...notificationList])
+
             } else {
-                console.log("el");
                 setMessages([...messages, newmsg])
             }
-            // message append
         })
     })
 
@@ -148,7 +142,7 @@ const SingleChat = ({ toggleFetchAgain }) => {
 
                 let { data } = await Axios.post(url, req, config)
                 socket.emit("new-message", data)
-                socket.emit("stop typing",selectedChat._id)
+                socket.emit("stop typing", selectedChat._id)
                 setMessages([...messages, data])
             }
         } catch (error) {
@@ -262,15 +256,15 @@ const SingleChat = ({ toggleFetchAgain }) => {
                                                         width={70}
                                                         style={{
                                                             marginLeft: '10px',
-                                                            
+
                                                         }}
                                                     />
                                                 </Box>
                                                 :
                                                 <></>
-                                        } 
+                                        }
                                     </Box>
-                            } 
+                            }
                             <CustomInputGroup value={message} onClick={submitMessage} loading={loading}
                                 icon={
                                     <IconButton aria-label='Add to friends' _hover={{ bg: 'teal.500' }} color={'white'} bg={'teal.500'}

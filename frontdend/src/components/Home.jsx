@@ -3,9 +3,10 @@ import { Box, Container, Tab, TabList, TabPanel, TabPanels, Tabs, Text } from "@
 import Login from "./Auth/Login";
 import SignUp from "./Auth/SignUp";
 
-
 const Home = () => {
+
   const [tabIndex, setTabIndex] = useState(0);
+  
   return <>
     <Container maxW={'xl'} centerContent d="flex" alignContent={'center'} >
       <Box display={'flex'} w={'100%'} p={3} justifyContent={'center'} bg={'white'} mt={10} borderRadius={'md'} shadow={'6px 7px 10px black'} >
@@ -15,13 +16,13 @@ const Home = () => {
       </Box>
       <Box mt={3} p={3} bg={'gray.100'} display={'flex'} w={'100%'} borderRadius={'md'} shadow={'6px 7px 10px black'}>
         <Tabs index={tabIndex} onChange={(index) => setTabIndex(index)} variant='solid-rounded' w={'100%'} colorScheme='teal' >
-          <TabList w={'100%'} display={'flex'}  justifyContent={'center'} rowGap={10}>
+          <TabList w={'100%'} display={'flex'} justifyContent={'center'} rowGap={10}>
             <Tab borderRadius={'md'} w={'50%'}>Login</Tab>
             <Tab borderRadius={'md'} w={'50%'}>Sign Up</Tab>
           </TabList>
           <TabPanels>
             <TabPanel>
-            <Login  setTabIndex={setTabIndex} />
+              <Login setTabIndex={setTabIndex} />
             </TabPanel>
             <TabPanel>
               <SignUp setTabIndex={setTabIndex} />

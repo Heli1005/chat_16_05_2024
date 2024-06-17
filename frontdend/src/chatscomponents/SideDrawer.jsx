@@ -8,11 +8,16 @@ import ProfileModal from "./ProfileModal";
 import ChatListLoading from "./ChatListLoading";
 import Axios from "axios";
 import SearchedChatList from "./SearchedChatList";
+import { getUserName } from "../config/ChatLogic";
+import NotificationBadge from "react-notification-badge";
+import { Effect } from "react-notification-badge";
+
+
 
 const SideDrawer = (props) => {
 
     const toast = useToast()
-    const { user, handleLogOut } = authUser()
+    const { user, handleLogOut, notificationList, setNotificationList, setSelectedChat } = authUser()
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [search, setSearch] = useState('');
     const [loading, setLoading] = useState(false);
@@ -46,7 +51,7 @@ const SideDrawer = (props) => {
         }
         setLoading(false)
     }
-   
+
     return <>
         <Box
             display="flex"
@@ -67,10 +72,38 @@ const SideDrawer = (props) => {
             </Tooltip>
             <Text fontWeight={'900'} color={'teal.600'} casing={'uppercase'} letterSpacing={'5px'} fontSize={'2xl'}>Chit Chat</Text>
             <div>
-                <Menu>
-                    <MenuButton>
+                <Menu >
+                    <MenuButton mx={3}>
+                        <NotificationBadge
+                            count={notificationList?.length}
+                            effect={Effect.SCALE}
+                        />
                         <BellIcon color={'teal.600'} fontSize={'2xl'} mr={2} />
                     </MenuButton>
+                    <MenuList px={2}>
+                        {
+                            notificationList?.length ?
+                                notificationList?.map(notification => {
+                                    return <MenuItem key={notification._id}
+                                        onClick={() => {
+                                            let temp = notificationList.filter(obj => obj._id !== notification._id)
+                                            setNotificationList(temp)
+                                            setSelectedChat(notification.chat)
+                                        }}
+                                    >
+                                        {
+                                            notification.chat?.isGroupChat
+                                                ?
+                                                `New message in ${notification.chat?.chatName}`
+                                                :
+                                                `New message from ${getUserName(notification.chat?.users)}`
+                                        }
+                                    </MenuItem>
+                                })
+                                :
+                                <MenuItem  >No new message...</MenuItem>
+                        }
+                    </MenuList>
                 </Menu>
                 <Menu >
                     <MenuButton as={Button} rightIcon={<ChevronDownIcon />} >
