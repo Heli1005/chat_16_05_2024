@@ -14,6 +14,7 @@ services:
     env: static
     buildCommand: cd frontdend && npm install && npm run build
     publishPath: frontdend/dist 
+     startCommand: npm start
     plan: free
 errors:
   - type: build
