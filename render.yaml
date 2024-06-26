@@ -1,8 +1,9 @@
 services:
   - type: web
-    name: chat_16_05_2024
+    name: my-fullstack-app
     env: node
     plan: free
+    rootDir: ./backend
     buildCommand: npm run build
     startCommand: npm start
     envVars:
