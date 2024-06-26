@@ -7,7 +7,7 @@
   "scripts": {
     "start": "nodemon server.js",
     "dev":"nodemon server.js",
-   "build": "npm install && npm install --prefix ../frontdend && npm run build --prefix ../frontdend"
+   "build": "npm install && npm install --prefix ../frontdend && npm run vite build --prefix ../frontdend"
   },
   "author": "Heli Gangwal",
   "license": "ISC",
