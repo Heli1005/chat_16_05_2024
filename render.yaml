@@ -15,3 +15,9 @@ services:
     buildCommand: cd frontdend && npm install && npm run build
     publishPath: frontdend/dist 
     plan: free
+errors:
+  - type: build
+    fileRegex: /_logs\/.*\.log/
+    messageRegex: /error|fail|fatal/i
+    severity: fatal
+    ignoreDuringBuild: true
