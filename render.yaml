@@ -13,8 +13,5 @@ services:
     name: frontdend
     env: static
     buildCommand: cd frontdend && npm install && npm run build
-    publishPath: frontdend/dist
-    envVars:
-      - key: NODE_ENV
-        value: production
+    publishPath: frontdend/dist 
     plan: free
