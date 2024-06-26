@@ -10,6 +10,8 @@ import messageRoutes from "./routes/messageRoutes.js";
 import { errorHandler, notFound } from "./middleware/errorMiddleware.js";
 import { Server } from "socket.io";
 import { createServer } from "http";
+import { fileURLToPath } from 'url';
+import path from "path";
 
 dotenv.config()
 connectDB()
@@ -65,13 +67,36 @@ io.on('connection', (socket) => {
 })
 
 app.use(express.json())
+
+
+
 const port = process.env.PORT || 5000
+
+
 
 app.use('/api/user', userRoutes)
 app.use('/api/uploadimage', uploadRoutes)
 app.use('/api/chat', chatRoutes)
 app.use('/api/message', messageRoutes)
-app.get('/', (req, res) => res.send('Hello World!'))
+// --------------------------------   Deployment   ---------------------------------------------
+
+if (process.env.NODE_ENV === 'production') {
+    const __filename = fileURLToPath(import.meta.url);
+    const __dirname1 = path.dirname(__filename);
+    const frontendPath = path.join(__dirname1, '..', 'frontdend', 'dist');
+    // console.log("Serving static files from:", frontendPath); // Log the path
+
+    // Serve static files from the frontend build directory
+    app.use(express.static(frontendPath));
+    app.get('*', (req, res) => {
+        res.sendFile(path.resolve(frontendPath, "index.html"))
+    })
+
+} else {
+    app.get('/', (req, res) => res.send('Backed run successfully...'))
+
+}
+// --------------------------------   Deployment   ---------------------------------------------
 app.use(notFound)
 app.use(errorHandler)
 

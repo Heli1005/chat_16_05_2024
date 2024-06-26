@@ -18,6 +18,8 @@ const ChatList = ({ fetchAgain }) => {
     useEffect(() => {
         fetchChats()
     }, [fetchAgain])
+    console.log("chats", chats);
+    
 
     const fetchChats = async () => {
         try {
@@ -96,7 +98,7 @@ const ChatList = ({ fetchAgain }) => {
                         (
                             <Stack overflowY={'scroll'} >
                                 {
-                                    chats.map(user => {
+                                    chats?.map(user => {
                                         return <SingleChatUI key={user._id} user={user}  />
                                     })
                                 }
