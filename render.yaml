@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: my-fullstack-app
+    name: chat_16_05_2024
     env: node
     plan: free
     rootDir: ./backend
