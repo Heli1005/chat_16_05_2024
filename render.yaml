@@ -3,7 +3,7 @@ services:
     name: chat_16_05_2024
     env: node
     plan: free
-    rootDir: ./backend
+    rootDir: backend
     buildCommand: npm run build
     startCommand: npm start
     envVars:
