@@ -15,4 +15,16 @@ export default defineConfig({
     },
   },
   plugins: [react()],
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          react: ['react', 'react-dom'],
+          vendor: ['lodash'],
+          
+          // Add more chunks as needed
+        },
+      },
+    },
+  },
 })
