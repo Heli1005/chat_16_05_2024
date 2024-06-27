@@ -4,7 +4,7 @@ services:
     env: node
     buildCommand: |
       cd backend && npm install
-      cd ../frontdend && npm install && npx vite build
+      cd ../frontdend && npm install
       cd ../backend
     startCommand: cd backend && npm start
     envVars:
@@ -16,9 +16,10 @@ services:
     name: frontdend
     env: static
     buildCommand: |
-      cd frontdend && npm install && npx vite build
+      cd frontdend && npm install
     publishPath: frontdend/dist  
     plan: free
+
 errors:
   - type: build
     fileRegex: /_logs\/.*\.log/
