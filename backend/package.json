@@ -7,7 +7,7 @@
   "scripts": {
     "start": "nodemon server.js",
     "dev": "nodemon server.js",
-    "build": "npm install && npm install --prefix ../frontdend && npx vite build --prefix ../frontdend"
+    "build": "npm install && npm install ../frontdend && npx vite build ../frontdend"
   },
   "author": "Heli Gangwal",
   "license": "ISC",
@@ -19,6 +19,7 @@
     "events": "^3.3.0",
     "express": "^4.19.2",
     "express-async-handler": "^1.2.0",
+    "frontdend": "file:../frontdend",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.4.0",
     "multer": "^1.4.5-lts.1",

@@ -2,7 +2,7 @@ services:
   - type: web
     name: backend
     env: node
-    buildCommand: cd backend && npm install && npm install --prefix ../frontdend && npm run build --prefix ../frontdend
+    buildCommand: cd backend && npm install && npm install ../frontdend && npm run build ../frontdend
     startCommand: cd backend && npm start
     envVars:
       - key: NODE_ENV
