@@ -13,8 +13,7 @@ services:
     name: frontdend
     env: static
     buildCommand: cd frontdend && npm install && npm run build
-    publishPath: frontdend/dist 
-     startCommand: npm start
+    publishPath: frontdend/dist  
     plan: free
 errors:
   - type: build
